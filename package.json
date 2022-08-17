@@ -4,7 +4,9 @@
   "description": "PerfectFit is Online Shopping Site for Fashion & Lifestyle in India.",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+
   },
   "keywords": [
     "perfectfit",
