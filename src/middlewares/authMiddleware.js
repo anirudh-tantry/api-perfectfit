@@ -5,10 +5,11 @@ const asyncMiddleware = require("./asyncMiddleware");
 
 exports.isAuthenticated = asyncMiddleware(async (req, res, next) => {
   const { token } = req.cookies || req.headers.token?.split(" ")[1];
-  console.log(token);
+  const test = req.headers.token;
+  console.log(token, test, test.split(" ")[1]);
 
   if (!token) {
-    return next(new ErrorHandler(401, "Unauthorized! Please log in."));
+    return next(new ErrorHandler(401, "Please log in."));
   }
 
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
