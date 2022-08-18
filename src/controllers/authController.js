@@ -59,6 +59,7 @@ exports.loginUser = asyncMiddleware(async (req, res, next) => {
     httpOnly: true,
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     secure: process.env.NODE_ENV === "production",
+    domain: "*.netlify.app",
   };
 
   res
