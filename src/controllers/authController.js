@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 const asyncMiddleware = require("../middlewares/asyncMiddleware");
 const User = require("../models/User");
 const ErrorHandler = require("../utils/ErrorHandler");
@@ -27,6 +27,8 @@ exports.registerUser = asyncMiddleware(async (req, res, next) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
   };
 
   res
@@ -55,6 +57,8 @@ exports.loginUser = asyncMiddleware(async (req, res, next) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
   };
 
   res
@@ -76,7 +80,7 @@ exports.loginAdmin = asyncMiddleware(async (req, res, next) => {
   if (!isPassMatch) {
     return next(new ErrorHandler(401, "Invalid credentials."));
   }
-  
+
   if (user.role !== "admin") {
     return next(new ErrorHandler(401, "You are not Admin."));
   }
@@ -150,7 +154,7 @@ exports.resetPassword = asyncMiddleware(async (req, res, next) => {
     .update(req.params.token)
     .digest("hex");
 
-    const isMatch = (password === confirmPassword);
+  const isMatch = password === confirmPassword;
 
   if (!isMatch) {
     return next(
@@ -174,5 +178,7 @@ exports.resetPassword = asyncMiddleware(async (req, res, next) => {
   user.password = req.body.password;
   user.save();
 
-  res.status(200).json({ success: true, message: "Password changed successfully." });
+  res
+    .status(200)
+    .json({ success: true, message: "Password changed successfully." });
 });
