@@ -52,7 +52,7 @@ userSchema.methods.matchPassword = function (password) {
 
 // JWT token generation Function
 userSchema.methods.generateToken = function () {
-  return jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET);
+  return jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
 // Generate Password Reset Token

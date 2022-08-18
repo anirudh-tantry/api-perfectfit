@@ -27,14 +27,12 @@ exports.registerUser = asyncMiddleware(async (req, res, next) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production",
   };
 
   res
     .status(201)
     .cookie("token", token, options)
-    .json({ success: true, message: "User registered successfully." });
+    .json({ success: true, message: "User registered successfully.", token });
 });
 
 // Login user
@@ -57,15 +55,12 @@ exports.loginUser = asyncMiddleware(async (req, res, next) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production",
-    domain: "perfectfit.netlify.app",
   };
 
   res
     .status(200)
     .cookie("token", token, options)
-    .json({ success: true, message: "Logged in successfully." });
+    .json({ success: true, message: "Logged in successfully.", token });
 });
 
 // Login admin
@@ -97,7 +92,7 @@ exports.loginAdmin = asyncMiddleware(async (req, res, next) => {
   res
     .status(200)
     .cookie("token", token, options)
-    .json({ success: true, message: "Logged in successfully." });
+    .json({ success: true, message: "Logged in successfully.", token });
 });
 
 // Logout user
