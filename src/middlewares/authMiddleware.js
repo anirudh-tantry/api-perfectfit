@@ -4,9 +4,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const asyncMiddleware = require("./asyncMiddleware");
 
 exports.isAuthenticated = asyncMiddleware(async (req, res, next) => {
-  const { token } = req.cookies || req.headers.token?.split(" ")[1];
-  const test = req.headers.token;
-  console.log(token, test, test.split(" ")[1]);
+  const { token } = req.cookies;
 
   if (!token) {
     return next(new ErrorHandler(401, "Please log in."));
