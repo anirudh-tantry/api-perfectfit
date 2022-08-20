@@ -24,7 +24,7 @@ class GetProduct {
 
     if (query.category) {
       // multile categories
-      let category = query.category.toString().replaceAll(",", "|");
+      let category = query.category.replaceAll(",", "|");
       query.category = { $regex: category, $options: "i" };
     }
     if (query.gender) {
@@ -39,12 +39,12 @@ class GetProduct {
     }
     if (query.brand) {
       // multile brands
-      let brands = query.brand.toString().replaceAll(",", "|");
+      let brands = query.brand.replaceAll(",", "|");
       query.brand = { $regex: brands, $options: "i" };
     }
     if (query.sizes) {
       // multile sizes
-      let sizes = query.sizes.toString().replaceAll(",", "|");
+      let sizes = query.sizes.replaceAll(",", "|");
       query.sizes = { $regex: sizes, $options: "i" };
     }
     if (query.price) {
