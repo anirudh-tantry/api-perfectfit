@@ -210,12 +210,13 @@ exports.rateProduct = asyncMiddleware(async (req, res, next) => {
     reviews: { $elemMatch: { userId: req.user._id } },
   });
 
+  // new rating
   if (!already_rated) {
     const product = await Product.findOne({ productId: productId });
 
     let ratingCount = product.ratingCount + 1;
     let newRting =
-      (product.rating * product.ratingCount + product.rating) / ratingCount;
+      (product.rating * product.ratingCount + rating) / ratingCount;
 
     await Product.updateOne(
       { productId },
@@ -229,14 +230,17 @@ exports.rateProduct = asyncMiddleware(async (req, res, next) => {
     );
 
     res.status(200).json({ success: true, message: "Rating added." });
+    return;
   }
 
+  // update rating
   let newRting =
     (already_rated.rating * already_rated.ratingCount -
       already_rated.reviews[0].rating +
       rating) /
     already_rated.ratingCount;
 
+  console.log(newRting);
 
   await Product.updateOne(
     { productId, reviews: { $elemMatch: { userId: req.user._id } } },
@@ -248,7 +252,6 @@ exports.rateProduct = asyncMiddleware(async (req, res, next) => {
 
 // Get Current Rating
 exports.getCurrentRating = asyncMiddleware(async (req, res, next) => {
-  
   const currentRating = await Product.findOne({
     productId: req.params.productId,
     reviews: { $elemMatch: { userId: req.user._id } },
@@ -261,6 +264,7 @@ exports.getCurrentRating = asyncMiddleware(async (req, res, next) => {
   }
 });
 
+// Total products
 exports.totalProducts = asyncMiddleware(async (req, res, next) => {
   const total = await Product.countDocuments();
 
